@@ -56,4 +56,5 @@ settings.gradle.projectsLoaded {
 	}
 }
 include 'peng'
+include 'peng-web'
 

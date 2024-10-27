@@ -7,7 +7,8 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
  * @Author: spengju
  * @Slogan: Day day no bug.
  * @Date: 2024/10/27 15:13
- * @Desc: $description
+ * @Desc: JDK1.8以上加上这个环境变量:
+ *        --add-opens java.base/java.lang=ALL-UNNAMED
  */
 public class Test {
     public static void main(String[] args) {
