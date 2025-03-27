@@ -1,0 +1,34 @@
+plugins {
+    id 'java'
+}
+
+group = 'com.peng'
+version = '6.2.6-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+
+    implementation(project(":spring-context"))
+    implementation(project(":spring-aop"))
+    implementation(project(":spring-jdbc"))
+    implementation(project(":spring-web"))
+    implementation(project(":spring-oxm"))
+
+    implementation("mysql:mysql-connector-java:8.0.21")
+    implementation("org.mybatis:mybatis-spring:3.0.4")
+    implementation("org.mybatis:mybatis:3.4.5")
+
+    implementation("org.aspectj:aspectjweaver:1.9.5")
+    implementation("jakarta.annotation:jakarta.annotation-api")
+    implementation("jakarta.servlet:jakarta.servlet-api")
+
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+}
+
+test {
+    useJUnitPlatform()
+}
