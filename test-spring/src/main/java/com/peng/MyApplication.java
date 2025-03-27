@@ -11,7 +11,8 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
  * @Author: spengju
  * @Slogan: Day day no bug.
  * @Date: 2025/3/27 14:14
- * @Desc:
+ * @Desc: git fetch upstream  拉取原仓库代码
+ *
  */
 public class MyApplication {
     public static void main(String[] args) {
