@@ -1074,6 +1074,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 			for (String beanName : beanNames) {
 				RootBeanDefinition mbd = getMergedLocalBeanDefinition(beanName);
 				if (!mbd.isAbstract() && mbd.isSingleton()) {
+					//多线程创建bean
 					CompletableFuture<?> future = preInstantiateSingleton(beanName, mbd);
 					if (future != null) {
 						futures.add(future);
@@ -1110,8 +1111,10 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	@Nullable
 	private CompletableFuture<?> preInstantiateSingleton(String beanName, RootBeanDefinition mbd) {
 		if (mbd.isBackgroundInit()) {
+			//默认情况下没有线程池
 			Executor executor = getBootstrapExecutor();
 			if (executor != null) {
+				//先创建所依赖的bean
 				String[] dependsOn = mbd.getDependsOn();
 				if (dependsOn != null) {
 					for (String dep : dependsOn) {
@@ -1167,8 +1170,12 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 
 	private void instantiateSingleton(String beanName) {
 		if (isFactoryBean(beanName)) {
+			//先创建factoryBean本身
 			Object bean = getBean(FACTORY_BEAN_PREFIX + beanName);
+			//创建factoryBean中getObject方法返回的bean
+			//isEagerInit是否在启动过程中创建对象
 			if (bean instanceof SmartFactoryBean<?> smartFactoryBean && smartFactoryBean.isEagerInit()) {
+				//调用getObject方法，将返回的对象放入spring容器
 				getBean(beanName);
 			}
 		}

@@ -1,5 +1,7 @@
 package com.peng;
 
+import com.peng.service.UserService;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.PropertySource;
 
@@ -12,4 +14,9 @@ import org.springframework.context.annotation.PropertySource;
 @ComponentScan("com.peng")
 @PropertySource("classpath:application.properties")
 public class MyConfig {
+
+//    @Bean(bootstrap = Bean.Bootstrap.BACKGROUND)
+//    public UserService userService() {
+//        return new UserService();
+//    }
 }

@@ -24,7 +24,10 @@ public class MyApplication {
 //        AnnotatedBeanDefinitionReader beanDefinitionReader = new AnnotatedBeanDefinitionReader(applicationContext);
 //        beanDefinitionReader.register(UserService.class);
 
-        UserService userService = (UserService) applicationContext.getBean("userService");
-        userService.test();
+//        UserService userService = (UserService) applicationContext.getBean("userService");
+//        userService.test();
+        System.out.println(applicationContext.getBean("pengFactoryBean"));
+        System.out.println(applicationContext.getBean("&pengFactoryBean"));
+        System.out.println(applicationContext.getBean("user"));
     }
 }
