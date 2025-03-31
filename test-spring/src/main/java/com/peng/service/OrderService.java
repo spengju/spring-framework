@@ -1,7 +1,6 @@
 package com.peng.service;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
 
 /**
@@ -11,12 +10,10 @@ import org.springframework.stereotype.Component;
  * @Desc:
  */
 @Component
-@DependsOn("orderService")
-public class UserService {
-    @Value("${name}")
-    private String name;
+public class OrderService {
+
 
     public void test(){
-        System.out.println(name);
+        System.out.println("order service");
     }
 }

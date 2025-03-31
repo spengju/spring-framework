@@ -344,6 +344,7 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 					// Leniently created singleton object could have appeared in the meantime.
 					singletonObject = this.singletonObjects.get(beanName);
 					if (singletonObject == null) {
+						//执行createBean
 						singletonObject = singletonFactory.getObject();
 						newSingleton = true;
 					}
