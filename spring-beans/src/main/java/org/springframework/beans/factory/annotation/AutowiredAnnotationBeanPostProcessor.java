@@ -590,6 +590,7 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 
 			final List<InjectionMetadata.InjectedElement> methodElements = new ArrayList<>();
 			ReflectionUtils.doWithLocalMethods(targetClass, method -> {
+                //桥接方法
 				Method bridgedMethod = BridgeMethodResolver.findBridgedMethod(method);
 				if (!BridgeMethodResolver.isVisibilityBridgeMethodPair(method, bridgedMethod)) {
 					return;
@@ -761,6 +762,7 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 		protected void inject(Object bean, @Nullable String beanName, @Nullable PropertyValues pvs) throws Throwable {
 			Field field = (Field) this.member;
 			Object value;
+			//cached针对多例多次创建bean的情况下
 			if (this.cached) {
 				try {
 					value = resolveCachedArgument(beanName, this.cachedFieldValue);
@@ -769,12 +771,14 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 					// Unexpected target bean mismatch for cached argument -> re-resolve
 					this.cached = false;
 					logger.debug("Failed to resolve cached argument", ex);
+					//根据属性field的类型和名字从容器中找到对应bean的值
 					value = resolveFieldValue(field, bean, beanName);
 				}
 			}
 			else {
 				value = resolveFieldValue(field, bean, beanName);
 			}
+			//通过反射进行赋值
 			if (value != null) {
 				ReflectionUtils.makeAccessible(field);
 				field.set(bean, value);
@@ -854,6 +858,7 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 				}
 			}
 			else {
+				//根据方法参数类型和名字去容器寻找bean对象
 				arguments = resolveMethodArguments(method, bean, beanName);
 			}
 			if (arguments != null) {
@@ -887,12 +892,16 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 			Set<String> autowiredBeanNames = CollectionUtils.newLinkedHashSet(argumentCount);
 			Assert.state(beanFactory != null, "No BeanFactory available");
 			TypeConverter typeConverter = beanFactory.getTypeConverter();
+            //遍历方法参数
 			for (int i = 0; i < arguments.length; i++) {
 				MethodParameter methodParam = new MethodParameter(method, i);
+
 				DependencyDescriptor currDesc = new DependencyDescriptor(methodParam, this.required);
+
 				currDesc.setContainingClass(bean.getClass());
 				descriptors[i] = currDesc;
 				try {
+                    //找到对应bean对象
 					Object arg = beanFactory.resolveDependency(currDesc, beanName, autowiredBeanNames, typeConverter);
 					if (arg == null && !this.required && !methodParam.isOptional()) {
 						arguments = null;
