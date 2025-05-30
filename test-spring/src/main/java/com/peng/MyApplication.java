@@ -25,11 +25,14 @@ public class MyApplication {
 //        beanDefinitionReader.register(UserService.class);
 
         UserService userService = (UserService) applicationContext.getBean("userService");
-        userService.test();
+//        userService.test();
+//        System.out.println(applicationContext.getBean("pengInstantiationAwareBeanPostProcessor"));
+
+        applicationContext.close();
 
 
-//        System.out.println(applicationContext.getBean("pengFactoryBean"));
-//        System.out.println(applicationContext.getBean("&pengFactoryBean"));
+        System.out.println(applicationContext.getBean("pengFactoryBean"));
+        System.out.println(applicationContext.getBean("&pengFactoryBean"));
 //        System.out.println(applicationContext.getBean("user"));
     }
 }

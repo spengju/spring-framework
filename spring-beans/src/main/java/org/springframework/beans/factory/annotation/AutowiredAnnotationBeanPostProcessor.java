@@ -291,6 +291,7 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 	@Override
 	public void postProcessMergedBeanDefinition(RootBeanDefinition beanDefinition, Class<?> beanType, String beanName) {
 		// Register externally managed config members on bean definition.
+		//寻找注入点,并缓存起来
 		findInjectionMetadata(beanName, beanType, beanDefinition);
 
 		// Use opportunity to clear caches which are not needed after singleton instantiation.
@@ -552,6 +553,7 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 					if (metadata != null) {
 						metadata.clear(pvs);
 					}
+					//生成注入点的对象并且缓存
 					metadata = buildAutowiringMetadata(clazz);
 					this.injectionMetadataCache.put(cacheKey, metadata);
 				}
@@ -579,7 +581,9 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 						}
 						return;
 					}
+					//是否必须注入值
 					boolean required = determineRequiredStatus(ann);
+					//添加属性注入点
 					fieldElements.add(new AutowiredFieldElement(field, required));
 				}
 			});
@@ -590,8 +594,10 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 				if (!BridgeMethodResolver.isVisibilityBridgeMethodPair(method, bridgedMethod)) {
 					return;
 				}
+				//查找方法上的@Autoired和@Value注解，都存在则返回@Autowired注解
 				MergedAnnotation<?> ann = findAutowiredAnnotation(bridgedMethod);
 				if (ann != null && method.equals(ClassUtils.getMostSpecificMethod(method, clazz))) {
+					//防止多例的情况下改变值
 					if (Modifier.isStatic(method.getModifiers())) {
 						if (logger.isInfoEnabled()) {
 							logger.info("Autowired annotation is not supported on static methods: " + method);
@@ -608,8 +614,10 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 									method);
 						}
 					}
+					//是否必须注入值
 					boolean required = determineRequiredStatus(ann);
 					PropertyDescriptor pd = BeanUtils.findPropertyForMethod(bridgedMethod, clazz);
+					//添加方法注入点
 					methodElements.add(new AutowiredMethodElement(method, required, pd));
 				}
 			});
