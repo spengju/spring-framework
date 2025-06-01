@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
  * @Desc:
  */
 @Component
-public class OrderService {
+public class OrderService1 {
 
 
     public void test(){
