@@ -576,7 +576,15 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
             instanceWrapper = this.factoryBeanInstanceCache.remove(beanName);
         }
         if (instanceWrapper == null) {
-            //实例化
+            //实例化. 推断构造方法注入，@Bean
+            /**
+             * 只有一个有参构造方法，则使用该构造方法
+             * 有多个构造方法:
+             *    1.有无参构造方法则使用无参构造方法，没有则报错
+             *    2.有一个加了@Autuwire的构造方法则使用该构造方法
+             *    3.开启了构造方法注入:
+             *      优先使用参数多的，根据参数找不着bean则使用能找着bean的构造方法
+             */
             instanceWrapper = createBeanInstance(beanName, mbd, args);
         }
         Object bean = instanceWrapper.getWrappedInstance();
@@ -1193,6 +1201,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
      */
     protected BeanWrapper createBeanInstance(String beanName, RootBeanDefinition mbd, @Nullable Object[] args) {
         // Make sure bean class is actually resolved at this point.
+        //加载类
         Class<?> beanClass = resolveBeanClass(mbd, beanName);
 
         if (beanClass != null && !Modifier.isPublic(beanClass.getModifiers()) && !mbd.isNonPublicAccessAllowed()) {
@@ -1201,12 +1210,13 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
         }
 
         if (args == null) {
+            //可以通过beanDefinition设置
             Supplier<?> instanceSupplier = mbd.getInstanceSupplier();
             if (instanceSupplier != null) {
                 return obtainFromSupplier(instanceSupplier, beanName, mbd);
             }
         }
-
+        // @Bean定义的Bean就是在这里进行的实例化
         if (mbd.getFactoryMethodName() != null) {
             return instantiateUsingFactoryMethod(beanName, mbd, args);
         }
@@ -1215,23 +1225,38 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
         boolean resolved = false;
         boolean autowireNecessary = false;
         if (args == null) {
+            //多例的情况
             synchronized (mbd.constructorArgumentLock) {
+                // resolvedConstructorOrFactoryMethod是用来缓存对应的构造方法或@Bean方法的
                 if (mbd.resolvedConstructorOrFactoryMethod != null) {
                     resolved = true;
+                    //缓存的是有参构造方法autowireNecessary为true
                     autowireNecessary = mbd.constructorArgumentsResolved;
                 }
             }
         }
+        // 已经知道了要用哪个构造方法
         if (resolved) {
+                // autowireNecessary为true，表示已经缓存了构造方法的参数值
             if (autowireNecessary) {
                 return autowireConstructor(beanName, mbd, null, null);
             } else {
+                // 进行构造方法注入，不过其实已经缓存好了参数值了，不需要在根据参数去找Bean
                 return instantiateBean(beanName, mbd);
             }
         }
-
+        // 不知道要用哪个构造方法，根据@Autowired注解来选择构造方法
+        // Candidate constructors for autowiring?
+        // 1. 返回加了@Autowired注解的构造方法（只有一个为true返回该构造方法,  多个 false + 无参构造方法）
+        // 2. 都没加@Autuwired注解,返回null
+        // 3. 只有一个构造方法，返回该构造方法
         // Candidate constructors for autowiring?
         Constructor<?>[] ctors = determineConstructorsFromBeanPostProcessors(beanClass, beanName);
+
+        // 如果ctors != null，其实表示的是上一步找到了多个构造方法，接下来要继续进行推断，并进行构造方法注入
+        // 不管上一步根据@Autowired找没找到构造方法，如果autowireMode为AUTOWIRE_CONSTRUCTOR，那么都会继续进行推断，并进行构造方法注入
+        // 如果BeanDefinition中指定了构造方法参数值，那么直接根据指定的参数值匹配构造方法，并将指定的参数值传给构造方法
+        // 如果getBean()方法中指定了构造方法参数值，那么直接根据指定的参数值匹配构造方法，并将指定的参数值传给构造方法
         if (ctors != null || mbd.getResolvedAutowireMode() == AUTOWIRE_CONSTRUCTOR ||
                 mbd.hasConstructorArgumentValues() || !ObjectUtils.isEmpty(args)) {
             return autowireConstructor(beanName, mbd, ctors, args);
@@ -1244,6 +1269,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
         }
 
         // No special handling: simply use no-arg constructor.
+        // 如果到了这一步，那就直接用无参构造方法来实例化得到对象了
         return instantiateBean(beanName, mbd);
     }
 

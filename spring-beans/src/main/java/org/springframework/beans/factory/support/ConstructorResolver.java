@@ -147,6 +147,7 @@ class ConstructorResolver {
 		}
 		else {
 			Object[] argsToResolve = null;
+			// 缓存了构造方法以及参数值
 			synchronized (mbd.constructorArgumentLock) {
 				constructorToUse = (Constructor<?>) mbd.resolvedConstructorOrFactoryMethod;
 				if (constructorToUse != null && mbd.constructorArgumentsResolved) {
@@ -158,12 +159,16 @@ class ConstructorResolver {
 				}
 			}
 			if (argsToResolve != null) {
+				//构造方法参数值
 				argsToUse = resolvePreparedArguments(beanName, mbd, bw, constructorToUse, argsToResolve);
 			}
 		}
-
+		// 如果没有缓存构造方法，或没有缓存构造方法参数值
 		if (constructorToUse == null || argsToUse == null) {
 			// Take specified constructors, if any.
+			// chosenCtors其实表示上一步根据@Autowired注解找到的构造方法，可能有多个
+			// 如果上一步没有找到构造方法，并且进到了当前方法，那么就会找到这个类中的所有方法
+			// 接下来就会从candidates中来选择一个构造方法作为最终的结果
 			Constructor<?>[] candidates = chosenCtors;
 			if (candidates == null) {
 				Class<?> beanClass = mbd.getBeanClass();
@@ -306,6 +311,7 @@ class ConstructorResolver {
 		}
 
 		Assert.state(argsToUse != null, "Unresolved constructor arguments");
+		// 用constructorToUse和argsToUse来创建对象
 		bw.setBeanInstance(instantiate(beanName, mbd, constructorToUse, argsToUse));
 		return bw;
 	}
