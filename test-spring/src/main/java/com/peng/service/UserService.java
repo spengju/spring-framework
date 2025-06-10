@@ -32,6 +32,19 @@ public class UserService {
 //        this.orderService = orderService;
 //    }
 
+    public UserService() {
+        this.orderService3 = orderService3;
+    }
+
+    public UserService(OrderService orderService) {
+        this.orderService3 = orderService3;
+    }
+
+    @Autowired(required = false)
+    public UserService(OrderService orderService3,OrderService orderService2) {
+        this.orderService3 = orderService3;
+    }
+
     public void test() {
         System.out.println(orderService3);
     }
