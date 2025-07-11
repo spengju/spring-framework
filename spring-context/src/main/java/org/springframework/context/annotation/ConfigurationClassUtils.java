@@ -147,6 +147,9 @@ public abstract class ConfigurationClassUtils {
 		if (config != null && !Boolean.FALSE.equals(config.get("proxyBeanMethods"))) {
 			beanDef.setAttribute(CONFIGURATION_CLASS_ATTRIBUTE, CONFIGURATION_CLASS_FULL);
 		}
+		// proxyBeanMethods为false，就是LITE
+		// 或者没有@Configuration，但是有@Component、@ComponentScan、@Import、@ImportResource、有加了@Bean的方法也是LITE
+		// SpringBoot中的自动配置类很多都是LITE
 		else if (config != null || Boolean.TRUE.equals(beanDef.getAttribute(CANDIDATE_ATTRIBUTE)) ||
 				isConfigurationCandidate(metadata)) {
 			beanDef.setAttribute(CONFIGURATION_CLASS_ATTRIBUTE, CONFIGURATION_CLASS_LITE);

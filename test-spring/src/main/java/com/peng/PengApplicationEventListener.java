@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
  * @Date: 2025/7/7 15:36
  * @Desc:
  */
-@Component
+//@Component
 public class PengApplicationEventListener implements ApplicationListener {
 
     @Override

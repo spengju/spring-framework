@@ -1,10 +1,19 @@
 package com.peng;
 
+import com.peng.mybatis.spring.PengImportBeanDefinitionRegistry;
+import com.peng.mybatis.spring.PengMapperScan;
 import com.peng.service.OrderService;
 import com.peng.service.UserService;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.mybatis.spring.SqlSessionFactoryBean;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
+
+import javax.sql.DataSource;
 
 /**
  * @Author: spengju
@@ -13,25 +22,25 @@ import org.springframework.context.annotation.PropertySource;
  * @Desc:
  */
 @ComponentScan("com.peng")
-@PropertySource("classpath:application.properties")
+//@MapperScan("com.peng.mapper")
+//@PropertySource("classpath:application.properties")
+@PengMapperScan("com.peng.mapper")
+@Import({PengImportBeanDefinitionRegistry.class})
 public class MyConfig {
 
-    //    @Bean(bootstrap = Bean.Bootstrap.BACKGROUND)
-//    public UserService userService() {
-//        return new UserService();
-//    }
     @Bean
-    public OrderService orderService1() {
-        return new OrderService();
+    public SqlSessionFactory sqlSessionFactory() throws Exception {
+        SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
+        sqlSessionFactoryBean.setDataSource(dataSource());
+        return sqlSessionFactoryBean.getObject();
     }
 
     @Bean
-    public OrderService orderService2() {
-        return new OrderService();
-    }
-
-    @Bean
-    public OrderService orderService3() {
-        return new OrderService();
+    public DataSource dataSource() {
+        DriverManagerDataSource dataSource = new DriverManagerDataSource();
+        dataSource.setUrl("jdbc:mysql://127.0.0.1:3306/peng");
+        dataSource.setUsername("root");
+        dataSource.setPassword("peng1234");
+        return dataSource;
     }
 }

@@ -1,6 +1,9 @@
 package com.peng;
 
 import com.peng.beanFactory.PengBeanFactorPostProceccor;
+import com.peng.mapper.OrderMapper;
+import com.peng.mapper.UserMapper;
+import com.peng.mybatis.spring.PengFactoryBean;
 import com.peng.service.OrderService;
 import com.peng.service.UserService;
 import org.springframework.beans.factory.annotation.AnnotatedGenericBeanDefinition;
@@ -16,31 +19,24 @@ import org.springframework.context.annotation.ComponentScan;
  * @Slogan: Day day no bug.
  * @Date: 2025/3/27 14:14
  * @Desc: git fetch upstream  拉取原仓库代码
+ *
+ * --add-opens java.base/java.lang=ALL-UNNAMED -Dlog.level=debug
  */
 public class MyApplication {
     public static void main(String[] args) {
         AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext();
-//        applicationContext.addApplicationListener(new PengApplicationEventListener());
         applicationContext.register(MyConfig.class);
-        applicationContext.addBeanFactoryPostProcessor(new PengBeanFactorPostProceccor());
+
+
+
         applicationContext.refresh();
-//        applicationContext.publishEvent("123");
 
-//        BeanDefinition beanDefinition = new AnnotatedGenericBeanDefinition(UserService.class);
-//        applicationContext.registerBeanDefinition("userService", beanDefinition);
+//        System.out.println(applicationContext.getBean("userMapper"));
+//        System.out.println(applicationContext.getBean("orderMapper"));
+//        System.out.println(applicationContext.getBean("&userMapper"));
+//        System.out.println(applicationContext.getBean("&orderMapper"));
 
-//        AnnotatedBeanDefinitionReader beanDefinitionReader = new AnnotatedBeanDefinitionReader(applicationContext);
-//        beanDefinitionReader.register(UserService.class);
-
-        OrderService orderService = (OrderService) applicationContext.getBean("orderService");
-        orderService.test();
-//        System.out.println(applicationContext.getBean("pengInstantiationAwareBeanPostProcessor"));
-//        userService.test();
-//        applicationContext.close();
-
-
-//        System.out.println(applicationContext.getBean("pengFactoryBean"));
-//        System.out.println(applicationContext.getBean("&pengFactoryBean"));
-//        System.out.println(applicationContext.getBean("user"));
+        UserService userService = (UserService) applicationContext.getBean("userService");
+        userService.test();
     }
 }

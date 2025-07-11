@@ -1,5 +1,6 @@
 package com.peng.service;
 
+import com.peng.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,38 +16,14 @@ import org.springframework.stereotype.Component;
  * @Desc:
  */
 @Component
-//@DependsOn("orderService")
 public class UserService {
 
-//    @Value("${name}")
-//    private String name;
-
     @Autowired
-    @Qualifier("orderService")
-    private OrderService orderService3;
+    private UserMapper userMapper;
 
-//    public OrderService getOrderService() {
-//        return orderService;
-//    }
-//
-//    public void setOrderService(OrderService orderService) {
-//        this.orderService = orderService;
-//    }
-
-    public UserService() {
-        this.orderService3 = orderService3;
-    }
-
-    public UserService(OrderService orderService) {
-        this.orderService3 = orderService3;
-    }
-
-    @Autowired(required = false)
-    public UserService(OrderService orderService3,OrderService orderService2) {
-        this.orderService3 = orderService3;
-    }
 
     public void test() {
-        System.out.println(orderService3);
+        Object string = userMapper.selectById();
+        System.out.println(string);
     }
 }
