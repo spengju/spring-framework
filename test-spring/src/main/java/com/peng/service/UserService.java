@@ -18,12 +18,16 @@ import org.springframework.stereotype.Component;
 @Component
 public class UserService {
 
-    @Autowired
-    private UserMapper userMapper;
-
+    OrderService orderService;
 
     public void test() {
-        Object string = userMapper.selectById();
-        System.out.println(string);
+//        int i = 1 / 0;
+
+//        orderService.test();
+        System.out.println("test...");
+    }
+
+    public void a() {
+        System.out.println("a...");
     }
 }

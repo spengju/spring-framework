@@ -1872,6 +1872,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
             throw new BeanCreationException(
                     (mbd != null ? mbd.getResourceDescription() : null), beanName, ex.getMessage(), ex);
         }
+        //初始化后 AOP
         if (mbd == null || !mbd.isSynthetic()) {
             wrappedBean = applyBeanPostProcessorsAfterInitialization(wrappedBean, beanName);
         }

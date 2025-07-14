@@ -38,5 +38,6 @@ public class MyApplication {
 
         UserService userService = (UserService) applicationContext.getBean("userService");
         userService.test();
+
     }
 }
