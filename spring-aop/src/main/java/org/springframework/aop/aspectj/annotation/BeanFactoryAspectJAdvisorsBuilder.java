@@ -113,6 +113,7 @@ public class BeanFactoryAspectJAdvisorsBuilder {
 								if (amd.getAjType().getPerClause().getKind() == PerClauseKind.SINGLETON) {
 									MetadataAwareAspectInstanceFactory factory =
 											new BeanFactoryAspectInstanceFactory(this.beanFactory, beanName);
+									//获取advisor
 									List<Advisor> classAdvisors = this.advisorFactory.getAdvisors(factory);
 									if (this.beanFactory.isSingleton(beanName)) {
 										this.advisorsCache.put(beanName, classAdvisors);

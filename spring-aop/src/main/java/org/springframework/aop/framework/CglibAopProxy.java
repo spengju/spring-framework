@@ -320,6 +320,7 @@ class CglibAopProxy implements AopProxy, Serializable {
 		boolean exposeProxy = this.advised.isExposeProxy();
 
 		// Choose an "aop" interceptor (used for AOP calls).
+		//this.advised --> proxyFactory
 		Callback aopInterceptor = new DynamicAdvisedInterceptor(this.advised);
 
 		// Choose a "straight to target" interceptor. (used for calls that are
@@ -697,6 +698,7 @@ class CglibAopProxy implements AopProxy, Serializable {
 		@Override
 		@Nullable
 		public Object intercept(Object proxy, Method method, Object[] args, MethodProxy methodProxy) throws Throwable {
+			//代理对象执行方法的时候会进入intercept方法里面
 			Object oldProxy = null;
 			boolean setProxyContext = false;
 			Object target = null;
@@ -710,6 +712,7 @@ class CglibAopProxy implements AopProxy, Serializable {
 				// Get as late as possible to minimize the time we "own" the target, in case it comes from a pool...
 				target = targetSource.getTarget();
 				Class<?> targetClass = (target != null ? target.getClass() : null);
+				//进行方法匹配过滤
 				List<Object> chain = this.advised.getInterceptorsAndDynamicInterceptionAdvice(method, targetClass);
 				Object retVal;
 				// Check whether we only have one InvokerInterceptor: that is,
@@ -720,10 +723,12 @@ class CglibAopProxy implements AopProxy, Serializable {
 					// it does nothing but a reflective operation on the target, and no hot
 					// swapping or fancy proxying.
 					Object[] argsToUse = AopProxyUtils.adaptArgumentsIfNecessary(method, args);
+					//执行被代理对象的方法
 					retVal = AopUtils.invokeJoinpointUsingReflection(target, method, argsToUse);
 				}
 				else {
 					// We need to create a method invocation...
+					//执行代理逻辑
 					retVal = new ReflectiveMethodInvocation(proxy, target, method, args, targetClass, chain).proceed();
 				}
 				return processReturnType(proxy, target, method, args, retVal);

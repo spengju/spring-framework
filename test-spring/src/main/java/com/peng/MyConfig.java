@@ -14,8 +14,10 @@ import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreato
 import org.springframework.aop.support.DefaultPointcutAdvisor;
 import org.springframework.aop.support.NameMatchMethodPointcut;
 import org.springframework.aop.support.NameMatchMethodPointcutAdvisor;
+import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.*;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
 
@@ -30,7 +32,8 @@ import javax.sql.DataSource;
 //@PropertySource("classpath:application.properties")
 //@PengMapperScan("com.peng.mapper")
 //@Import({PengImportBeanDefinitionRegistry.class})
-//@EnableAspectJAutoProxy
+@EnableAspectJAutoProxy
+//@EnableTransactionManagement
 public class MyConfig {
 
     @Bean
@@ -71,6 +74,7 @@ public class MyConfig {
 //    }
 
     @Bean
+    @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
     public DefaultPointcutAdvisor defaultPointcutAdvisor() {
 
         DefaultPointcutAdvisor advisor = new DefaultPointcutAdvisor();
@@ -82,10 +86,10 @@ public class MyConfig {
         advisor.setAdvice(new PengMethodBeforeAdvice());
         return advisor;
     }
-
-    @Bean
-    public DefaultAdvisorAutoProxyCreator defaultAdvisorAutoProxyCreator() {
-        DefaultAdvisorAutoProxyCreator advisorAutoProxyCreator = new DefaultAdvisorAutoProxyCreator();
-        return advisorAutoProxyCreator;
-    }
+//
+//    @Bean
+//    public DefaultAdvisorAutoProxyCreator defaultAdvisorAutoProxyCreator() {
+//        DefaultAdvisorAutoProxyCreator advisorAutoProxyCreator = new DefaultAdvisorAutoProxyCreator();
+//        return advisorAutoProxyCreator;
+//    }
 }

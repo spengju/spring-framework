@@ -12,8 +12,8 @@ import org.springframework.stereotype.Component;
  * @Date: 2025/7/14 09:47
  * @Desc:
  */
-//@Aspect
-//@Component
+@Aspect
+@Component
 public class PengAspect {
 
     @Pointcut("execution(public void com.peng.service.UserService.test())")
