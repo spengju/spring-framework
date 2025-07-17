@@ -1,9 +1,8 @@
-package com.peng;
+package com.peng.listener;
 
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.PayloadApplicationEvent;
-import org.springframework.stereotype.Component;
 
 /**
  * @Author: spengju

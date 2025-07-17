@@ -42,6 +42,7 @@ final class TransactionAttributeSourcePointcut extends StaticMethodMatcherPointc
 
 
 	public TransactionAttributeSourcePointcut() {
+		//类匹配，判断该类是否有transactional注解
 		setClassFilter(new TransactionAttributeSourceClassFilter());
 	}
 
@@ -52,6 +53,7 @@ final class TransactionAttributeSourcePointcut extends StaticMethodMatcherPointc
 
 	@Override
 	public boolean matches(Method method, Class<?> targetClass) {
+		//判断某个类上的方法是否有transactional注解
 		return (this.transactionAttributeSource == null ||
 				this.transactionAttributeSource.hasTransactionAttribute(method, targetClass));
 	}

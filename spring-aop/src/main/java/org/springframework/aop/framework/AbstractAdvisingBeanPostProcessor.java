@@ -90,7 +90,7 @@ public abstract class AbstractAdvisingBeanPostProcessor extends ProxyProcessorSu
 			// Ignore AOP infrastructure such as scoped proxies.
 			return bean;
 		}
-
+		//如果bean是代理对象，比如spring的代理对象
 		if (bean instanceof Advised advised) {
 			if (!advised.isFrozen() && isEligible(AopUtils.getTargetClass(bean))) {
 				// Add our local Advisor to the existing proxy's Advisor chain.

@@ -16,10 +16,17 @@ import org.springframework.aop.support.NameMatchMethodPointcut;
 import org.springframework.aop.support.NameMatchMethodPointcutAdvisor;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.*;
+import org.springframework.core.task.TaskExecutor;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.scheduling.annotation.AsyncConfigurer;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
+import java.util.concurrent.Executor;
 
 /**
  * @Author: spengju
@@ -28,29 +35,37 @@ import javax.sql.DataSource;
  * @Desc:
  */
 @ComponentScan
-//@MapperScan("com.peng.mapper")
+@MapperScan("com.peng.mapper")
 //@PropertySource("classpath:application.properties")
 //@PengMapperScan("com.peng.mapper")
 //@Import({PengImportBeanDefinitionRegistry.class})
 @EnableAspectJAutoProxy
-//@EnableTransactionManagement
+@EnableAsync
 public class MyConfig {
 
-    @Bean
-    public SqlSessionFactory sqlSessionFactory() throws Exception {
-        SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
-        sqlSessionFactoryBean.setDataSource(dataSource());
-        return sqlSessionFactoryBean.getObject();
-    }
+//    @Bean
+//    public AsyncConfigurer asyncConfigurer() {
+//        return new AsyncConfigurer() {
+//            @Override
+//            public Executor getAsyncExecutor() {
+//                return AsyncConfigurer.super.getAsyncExecutor();
+//            }
+//        };
+//    }
 
     @Bean
-    public DataSource dataSource() {
-        DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setUrl("jdbc:mysql://127.0.0.1:3306/peng");
-        dataSource.setUsername("root");
-        dataSource.setPassword("peng1234");
-        return dataSource;
+    public TaskExecutor taskExecutor() {
+        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+        executor.setCorePoolSize(5);
+        executor.setMaxPoolSize(10);
+        executor.setThreadNamePrefix("peng-task-");
+
+//        executor.setVirtualThreads(true);
+
+        executor.initialize();
+        return executor;
     }
+
 
 //    @Bean
 //    public ProxyFactoryBean proxyFactoryBean() {
@@ -60,10 +75,10 @@ public class MyConfig {
 //        return proxyFactoryBean;
 //    }
 
-    @Bean
-    public PengMethodBeforeAdvice pengMethodBeforeAdvice() {
-        return new PengMethodBeforeAdvice();
-    }
+//    @Bean
+//    public PengMethodBeforeAdvice pengMethodBeforeAdvice() {
+//        return new PengMethodBeforeAdvice();
+//    }
 
 //    @Bean
 //    public BeanNameAutoProxyCreator beanNameAutoProxyCreator() {
@@ -73,19 +88,19 @@ public class MyConfig {
 //        return beanNameAutoProxyCreator;
 //    }
 
-    @Bean
-    @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
-    public DefaultPointcutAdvisor defaultPointcutAdvisor() {
-
-        DefaultPointcutAdvisor advisor = new DefaultPointcutAdvisor();
-
-        NameMatchMethodPointcut pointcut = new NameMatchMethodPointcut();
-        pointcut.addMethodName("test");
-
-        advisor.setPointcut(pointcut);
-        advisor.setAdvice(new PengMethodBeforeAdvice());
-        return advisor;
-    }
+//    @Bean
+//    @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
+//    public DefaultPointcutAdvisor defaultPointcutAdvisor() {
+//
+//        DefaultPointcutAdvisor advisor = new DefaultPointcutAdvisor();
+//
+//        NameMatchMethodPointcut pointcut = new NameMatchMethodPointcut();
+//        pointcut.addMethodName("test");
+//
+//        advisor.setPointcut(pointcut);
+//        advisor.setAdvice(new PengMethodBeforeAdvice());
+//        return advisor;
+//    }
 //
 //    @Bean
 //    public DefaultAdvisorAutoProxyCreator defaultAdvisorAutoProxyCreator() {

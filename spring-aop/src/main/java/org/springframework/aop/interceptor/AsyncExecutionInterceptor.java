@@ -124,7 +124,7 @@ public class AsyncExecutionInterceptor extends AsyncExecutionAspectSupport imple
 			}
 			return null;
 		};
-
+		//获取当前执行方法的返回值
 		return doSubmit(task, executor, userMethod.getReturnType());
 	}
 

@@ -381,6 +381,7 @@ public abstract class AbstractPlatformTransactionManager
 
 		if (isExistingTransaction(transaction)) {
 			// Existing transaction found -> check propagation behavior to find out how to behave.
+			//已经存在事务了
 			return handleExistingTransaction(def, transaction, debugEnabled);
 		}
 
@@ -394,6 +395,7 @@ public abstract class AbstractPlatformTransactionManager
 			throw new IllegalTransactionStateException(
 					"No existing transaction found for transaction marked with propagation 'mandatory'");
 		}
+		//不存在事务，隔离级别是这三个会开启一个事务
 		else if (def.getPropagationBehavior() == TransactionDefinition.PROPAGATION_REQUIRED ||
 				def.getPropagationBehavior() == TransactionDefinition.PROPAGATION_REQUIRES_NEW ||
 				def.getPropagationBehavior() == TransactionDefinition.PROPAGATION_NESTED) {
@@ -427,6 +429,7 @@ public abstract class AbstractPlatformTransactionManager
 			TransactionDefinition definition, Object transaction, boolean debugEnabled)
 			throws TransactionException {
 
+		//如果已经存在事务，但是隔离级别是PROPAGATION_NEVER则报错
 		if (definition.getPropagationBehavior() == TransactionDefinition.PROPAGATION_NEVER) {
 			throw new IllegalTransactionStateException(
 					"Existing transaction found for transaction marked with propagation 'never'");
@@ -447,8 +450,10 @@ public abstract class AbstractPlatformTransactionManager
 				logger.debug("Suspending current transaction, creating new transaction with name [" +
 						definition.getName() + "]");
 			}
+			//挂起ThreadLocal里面的数据库连接（拿出当前线程里面的数据库连接对象）
 			SuspendedResourcesHolder suspendedResources = suspend(transaction);
 			try {
+				//新开一个事务
 				return startTransaction(definition, transaction, false, debugEnabled, suspendedResources);
 			}
 			catch (RuntimeException | Error beginEx) {
@@ -792,6 +797,7 @@ public abstract class AbstractPlatformTransactionManager
 					unexpectedRollback = status.isGlobalRollbackOnly();
 					this.transactionExecutionListeners.forEach(listener -> listener.beforeCommit(status));
 					commitListenerInvoked = true;
+					//提交事务
 					doCommit(status);
 				}
 				else if (isFailEarlyOnGlobalRollbackOnly()) {
@@ -844,6 +850,7 @@ public abstract class AbstractPlatformTransactionManager
 
 		}
 		finally {
+			//恢复 --> 把挂起的数据库连接重新设置回ThreadLocal
 			cleanupAfterCompletion(status);
 		}
 	}
@@ -898,6 +905,7 @@ public abstract class AbstractPlatformTransactionManager
 				}
 				else {
 					// Participating in larger transaction
+					//Propagation.REQUIRED
 					if (status.hasTransaction()) {
 						if (status.isLocalRollbackOnly() || isGlobalRollbackOnParticipationFailure()) {
 							if (status.isDebug()) {

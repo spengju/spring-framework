@@ -6,6 +6,7 @@ import com.peng.mapper.UserMapper;
 import com.peng.mybatis.spring.PengFactoryBean;
 import com.peng.service.OrderService;
 import com.peng.service.UserService;
+import com.peng.transaction.PengService;
 import org.springframework.beans.factory.annotation.AnnotatedGenericBeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
@@ -36,8 +37,8 @@ public class MyApplication {
 //        System.out.println(applicationContext.getBean("&userMapper"));
 //        System.out.println(applicationContext.getBean("&orderMapper"));
 
-        UserService userService = (UserService) applicationContext.getBean("userService");
-        userService.test();
+        PengService pengService = (PengService) applicationContext.getBean("pengService");
+        pengService.test();
 
     }
 }
