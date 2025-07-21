@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
  * @Date: 2025/3/27 14:14
  * @Desc:
  */
-@Component
+//@Component
 public class OrderService{
 
     public void a() {

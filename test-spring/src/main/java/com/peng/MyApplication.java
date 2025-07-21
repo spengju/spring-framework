@@ -1,6 +1,7 @@
 package com.peng;
 
 import com.peng.beanFactory.PengBeanFactorPostProceccor;
+import com.peng.circular.AService;
 import com.peng.mapper.OrderMapper;
 import com.peng.mapper.UserMapper;
 import com.peng.mybatis.spring.PengFactoryBean;
@@ -20,7 +21,7 @@ import org.springframework.context.annotation.ComponentScan;
  * @Slogan: Day day no bug.
  * @Date: 2025/3/27 14:14
  * @Desc: git fetch upstream  拉取原仓库代码
- *
+ * <p>
  * --add-opens java.base/java.lang=ALL-UNNAMED -Dlog.level=debug
  */
 public class MyApplication {
@@ -28,8 +29,7 @@ public class MyApplication {
         AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext();
         applicationContext.register(MyConfig.class);
 
-
-
+//        applicationContext.setAllowCircularReferences(false);
         applicationContext.refresh();
 
 //        System.out.println(applicationContext.getBean("userMapper"));
@@ -37,8 +37,11 @@ public class MyApplication {
 //        System.out.println(applicationContext.getBean("&userMapper"));
 //        System.out.println(applicationContext.getBean("&orderMapper"));
 
-        PengService pengService = (PengService) applicationContext.getBean("pengService");
-        pengService.test();
+//        PengService pengService = (PengService) applicationContext.getBean("pengService");
+//        pengService.test();
+
+        AService aService = (AService) applicationContext.getBean("AService");
+        aService.test();
 
     }
 }

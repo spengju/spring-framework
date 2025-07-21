@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
  * @Date: 2025/7/11 10:57
  * @Desc:
  */
-@Component
+//@Component
 public class PengBeanDefinitionRegistryPostProcessor implements BeanDefinitionRegistryPostProcessor {
     @Override
     public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry) throws BeansException {

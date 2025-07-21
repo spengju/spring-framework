@@ -265,7 +265,7 @@ public class ScheduledAnnotationBeanPostProcessor
 				configurer.configureTasks(this.registrar);
 			}
 		}
-
+		//所有非懒加载单例bean创建完成后，执行定时任务
 		this.registrar.afterPropertiesSet();
 	}
 
@@ -290,6 +290,7 @@ public class ScheduledAnnotationBeanPostProcessor
 		Class<?> targetClass = AopProxyUtils.ultimateTargetClass(bean);
 		if (!this.nonAnnotatedClasses.contains(targetClass) &&
 				AnnotationUtils.isCandidateClass(targetClass, List.of(Scheduled.class, Schedules.class))) {
+			//找出加了@Scheduled的方法
 			Map<Method, Set<Scheduled>> annotatedMethods = MethodIntrospector.selectMethods(targetClass,
 					(MethodIntrospector.MetadataLookup<Set<Scheduled>>) method -> {
 						Set<Scheduled> scheduledAnnotations = AnnotatedElementUtils.getMergedRepeatableAnnotations(
@@ -304,6 +305,7 @@ public class ScheduledAnnotationBeanPostProcessor
 			}
 			else {
 				// Non-empty set of methods
+				//遍历每个定时任务方法，调用processScheduled
 				annotatedMethods.forEach((method, scheduledAnnotations) ->
 						scheduledAnnotations.forEach(scheduled -> processScheduled(scheduled, method, bean)));
 				if (logger.isTraceEnabled()) {
@@ -410,6 +412,7 @@ public class ScheduledAnnotationBeanPostProcessor
 			Set<ScheduledTask> tasks = new LinkedHashSet<>(4);
 
 			// Determine initial delay
+			//初始化延迟时间
 			Duration initialDelay = toDuration(scheduled.initialDelay(), scheduled.timeUnit());
 			String initialDelayString = scheduled.initialDelayString();
 			if (StringUtils.hasText(initialDelayString)) {
@@ -429,6 +432,7 @@ public class ScheduledAnnotationBeanPostProcessor
 			}
 
 			// Check cron expression
+			//解析cron表达式，生成CronTask
 			String cron = scheduled.cron();
 			if (StringUtils.hasText(cron)) {
 				String zone = scheduled.zone();

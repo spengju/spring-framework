@@ -11,7 +11,7 @@ import org.apache.ibatis.annotations.Select;
  * @Date: 2025/7/10 15:49
  * @Desc:
  */
-@Mapper
+//@Mapper
 //@Component
 public interface PengMapper {
 

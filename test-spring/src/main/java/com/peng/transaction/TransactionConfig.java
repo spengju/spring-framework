@@ -38,8 +38,8 @@ import javax.sql.DataSource;
  * 6、未出现异常则提及事务conn1.commit(),出现异常则回滚:conn.rollback()
  *
  */
-@EnableTransactionManagement
-@Configuration
+//@EnableTransactionManagement
+//@Configuration
 public class TransactionConfig {
     @Bean
     public PlatformTransactionManager transactionManager() {

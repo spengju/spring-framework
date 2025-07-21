@@ -426,6 +426,7 @@ public class ScheduledTaskRegistrar implements ScheduledTaskHolder, Initializing
 	 * {@linkplain #setTaskScheduler(TaskScheduler) task scheduler}.
 	 */
 	protected void scheduleTasks() {
+		//如果没有定时任务则使用单线程
 		if (this.taskScheduler == null) {
 			this.localExecutor = Executors.newSingleThreadScheduledExecutor();
 			this.taskScheduler = new ConcurrentTaskScheduler(this.localExecutor);

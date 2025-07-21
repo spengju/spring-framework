@@ -29,7 +29,7 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
  * *3.方法是private会导致事务失效：spring代理是cglib代理，cglib代理是基于父子类的，子类没法重写父累的私有方法
  *
  */
-@Component
+//@Component
 public class PengService {
 
     @Autowired

@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
  * @Date: 2025/7/9 11:31
  * @Desc:
  */
-@Configuration(proxyBeanMethods = false)
+//@Configuration(proxyBeanMethods = false)
 public class MyConfiguration {
 
     @Bean

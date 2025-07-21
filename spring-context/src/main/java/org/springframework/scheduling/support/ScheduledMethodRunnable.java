@@ -121,6 +121,7 @@ public class ScheduledMethodRunnable implements SchedulingAwareRunnable {
 		Observation observation = ScheduledTaskObservationDocumentation.TASKS_SCHEDULED_EXECUTION.observation(
 				null, DEFAULT_CONVENTION,
 				() -> context, this.observationRegistrySupplier.get());
+		//执行定时任务方法
 		observation.observe(() -> runInternal(context));
 	}
 

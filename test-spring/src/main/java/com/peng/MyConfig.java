@@ -15,17 +15,23 @@ import org.springframework.aop.support.DefaultPointcutAdvisor;
 import org.springframework.aop.support.NameMatchMethodPointcut;
 import org.springframework.aop.support.NameMatchMethodPointcutAdvisor;
 import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.cache.concurrent.ConcurrentMapCacheManager;
 import org.springframework.context.annotation.*;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.annotation.AsyncConfigurer;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
+import java.util.Arrays;
 import java.util.concurrent.Executor;
 
 /**
@@ -34,14 +40,23 @@ import java.util.concurrent.Executor;
  * @Date: 2025/3/27 14:02
  * @Desc:
  */
-@ComponentScan
-@MapperScan("com.peng.mapper")
+@ComponentScan("com.peng")
+//@MapperScan("com.peng.mapper")
 //@PropertySource("classpath:application.properties")
 //@PengMapperScan("com.peng.mapper")
 //@Import({PengImportBeanDefinitionRegistry.class})
-@EnableAspectJAutoProxy
+//@EnableAspectJAutoProxy
 @EnableAsync
+//@EnableScheduling
+//@EnableCaching
 public class MyConfig {
+
+//    @Bean
+//    public ConcurrentMapCacheManager concurrentMapCacheManager() {
+//        ConcurrentMapCacheManager cacheManager = new ConcurrentMapCacheManager();
+//        cacheManager.setCacheNames(Arrays.asList("cache1", "cache2"));
+//        return cacheManager;
+//    }
 
 //    @Bean
 //    public AsyncConfigurer asyncConfigurer() {
@@ -53,18 +68,27 @@ public class MyConfig {
 //        };
 //    }
 
-    @Bean
-    public TaskExecutor taskExecutor() {
-        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        executor.setCorePoolSize(5);
-        executor.setMaxPoolSize(10);
-        executor.setThreadNamePrefix("peng-task-");
-
-//        executor.setVirtualThreads(true);
-
-        executor.initialize();
-        return executor;
-    }
+//    @Bean
+//    public TaskExecutor taskExecutor() {
+//        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+//        executor.setCorePoolSize(5);
+//        executor.setMaxPoolSize(10);
+//        executor.setThreadNamePrefix("peng-task-");
+//
+////        executor.setVirtualThreads(true);
+//
+//        executor.initialize();
+//        return executor;
+//    }
+//
+//    @Bean
+//    public TaskScheduler taskScheduler() {
+//        ThreadPoolTaskScheduler taskScheduler = new ThreadPoolTaskScheduler();
+//        taskScheduler.setPoolSize(5);
+//        taskScheduler.setThreadNamePrefix("peng-task-");
+//        taskScheduler.initialize();
+//        return taskScheduler;
+//    }
 
 
 //    @Bean

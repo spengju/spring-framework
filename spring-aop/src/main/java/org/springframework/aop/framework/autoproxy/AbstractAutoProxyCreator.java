@@ -264,6 +264,7 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 	@Override
 	public Object getEarlyBeanReference(Object bean, String beanName) {
 		Object cacheKey = getCacheKey(bean.getClass(), beanName);
+		//标记当前bean提前进行了初始化
 		this.earlyBeanReferences.put(cacheKey, bean);
 		return wrapIfNecessary(bean, beanName, cacheKey);
 	}
@@ -317,6 +318,7 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 		if (bean != null) {
 			//cacheKey --> beanName
 			Object cacheKey = getCacheKey(bean.getClass(), beanName);
+			//判断当前bean有没有提前进行aop
 			if (this.earlyBeanReferences.remove(cacheKey) != bean) {
 				return wrapIfNecessary(bean, beanName, cacheKey);
 			}

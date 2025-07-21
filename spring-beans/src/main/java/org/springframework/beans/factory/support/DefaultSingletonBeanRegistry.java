@@ -150,6 +150,7 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 	 * @param singletonObject the singleton object
 	 */
 	protected void addSingleton(String beanName, Object singletonObject) {
+		//放到单例池
 		Object oldObject = this.singletonObjects.putIfAbsent(beanName, singletonObject);
 		if (oldObject != null) {
 			throw new IllegalStateException("Could not register object [" + singletonObject +
@@ -202,8 +203,11 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 	@Nullable
 	protected Object getSingleton(String beanName, boolean allowEarlyReference) {
 		// Quick check for existing instance without full singleton lock.
+		//一级缓存
 		Object singletonObject = this.singletonObjects.get(beanName);
+		//判断当前bean是不是在创建中
 		if (singletonObject == null && isSingletonCurrentlyInCreation(beanName)) {
+			//二级缓存
 			singletonObject = this.earlySingletonObjects.get(beanName);
 			if (singletonObject == null && allowEarlyReference) {
 				if (!this.singletonLock.tryLock()) {
@@ -216,10 +220,13 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 					if (singletonObject == null) {
 						singletonObject = this.earlySingletonObjects.get(beanName);
 						if (singletonObject == null) {
+							//三级缓存
 							ObjectFactory<?> singletonFactory = this.singletonFactories.get(beanName);
 							if (singletonFactory != null) {
+								//执行三级缓存的lambda表达式,此时拿到的是普通对象或者是代理对象
 								singletonObject = singletonFactory.getObject();
 								// Singleton could have been added or removed in the meantime.
+								//保存到二级缓存里面去
 								if (this.singletonFactories.remove(beanName) != null) {
 									this.earlySingletonObjects.put(beanName, singletonObject);
 								}
@@ -374,6 +381,7 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 
 				if (newSingleton) {
 					try {
+						//把bean放到单例池
 						addSingleton(beanName, singletonObject);
 					}
 					catch (IllegalStateException ex) {
