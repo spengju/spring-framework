@@ -145,7 +145,7 @@ public abstract class HttpServletBean extends HttpServlet implements Environment
 	 * properties are missing), or if subclass initialization fails.
 	 */
 	@Override
-	public final void init() throws ServletException {
+	public void init() throws ServletException {
 
 		// Set bean properties from init parameters.
 		PropertyValues pvs = new ServletConfigPropertyValues(getServletConfig(), this.requiredProperties);
@@ -166,6 +166,7 @@ public abstract class HttpServletBean extends HttpServlet implements Environment
 		}
 
 		// Let subclasses do whatever initialization they like.
+		//创建spring容器
 		initServletBean();
 	}
 
