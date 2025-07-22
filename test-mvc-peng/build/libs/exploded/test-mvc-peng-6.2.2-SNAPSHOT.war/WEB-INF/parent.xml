@@ -9,5 +9,7 @@
 
 <!--	<context:component-scan base-package="com.peng"></context:component-scan>-->
 	<context:annotation-config></context:annotation-config>
-	<bean name="peng2Controller" class="com.peng.controller.Peng2Controller"></bean>
+	<bean name="peng2Service" class="com.peng.service.Peng2Service"></bean>
+	<bean name="pengService" class="com.peng.service.PengService"></bean>
+
 </beans>

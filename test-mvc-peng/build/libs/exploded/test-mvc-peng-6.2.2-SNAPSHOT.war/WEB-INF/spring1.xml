@@ -7,5 +7,7 @@
         http://www.springframework.org/schema/context
         http://www.springframework.org/schema/context/spring-context.xsd">
 
-	<context:component-scan base-package="com.peng"></context:component-scan>
+<!--	<context:component-scan base-package="com.peng"></context:component-scan>-->
+	<context:annotation-config></context:annotation-config>
+	<bean name="peng2Controller" class="com.peng.controller.Peng2Controller"></bean>
 </beans>

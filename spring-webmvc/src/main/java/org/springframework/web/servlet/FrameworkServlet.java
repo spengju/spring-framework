@@ -704,11 +704,7 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
         //org.springframework.web.context.support.XmlWebApplicationContext
         Class<?> contextClass = getContextClass();
         if (!ConfigurableWebApplicationContext.class.isAssignableFrom(contextClass)) {
-            throw new ApplicationContextException(
-                    "Fatal initialization error in servlet with name '" + getServletName() +
-                            "': custom WebApplicationContext class [" + contextClass.getName() +
-                            "] is not of type ConfigurableWebApplicationContext");
-        }
+         }
         //创建空容器
         ConfigurableWebApplicationContext wac =
                 (ConfigurableWebApplicationContext) BeanUtils.instantiateClass(contextClass);
