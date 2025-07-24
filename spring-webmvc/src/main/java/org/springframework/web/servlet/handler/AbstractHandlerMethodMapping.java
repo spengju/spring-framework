@@ -219,6 +219,7 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 	 * @see #handlerMethodsInitialized
 	 */
 	protected void initHandlerMethods() {
+		//找到spring容器里面所有的beanName
 		for (String beanName : getCandidateBeanNames()) {
 			if (!beanName.startsWith(SCOPED_TARGET_NAME_PREFIX)) {
 				processCandidateBean(beanName);
@@ -261,6 +262,7 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 				logger.trace("Could not resolve type for bean '" + beanName + "'", ex);
 			}
 		}
+		//类上有@Controller注解则为Handler
 		if (beanType != null && isHandler(beanType)) {
 			detectHandlerMethods(beanName);
 		}
@@ -277,6 +279,7 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 
 		if (handlerType != null) {
 			Class<?> userType = ClassUtils.getUserClass(handlerType);
+			//找到类里加了@RequestMapping的方法
 			Map<Method, T> methods = MethodIntrospector.selectMethods(userType,
 					(MethodIntrospector.MetadataLookup<T>) method -> {
 						try {
@@ -637,6 +640,7 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 				validateMethodMapping(handlerMethod, mapping);
 
 				Set<String> directPaths = AbstractHandlerMethodMapping.this.getDirectPaths(mapping);
+				//一个path可以对应多个mapping对象,pathLookup --> 路径对应的@ReauestMapingInfo
 				for (String path : directPaths) {
 					this.pathLookup.add(path, mapping);
 				}
@@ -657,7 +661,7 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 				// Init validation flags
 				// We do this strictly after using the original instance in the CORS lookups
 				handlerMethod = handlerMethod.createWithValidateFlags();
-
+				//registry --> ReauestMapingInfo对应的handlerMethod
 				this.registry.put(mapping,
 						new MappingRegistration<>(mapping, handlerMethod, directPaths, name, corsConfig != null));
 			}
