@@ -100,9 +100,11 @@ public class StandardMultipartHttpServletRequest extends AbstractMultipartHttpSe
 				ContentDisposition disposition = ContentDisposition.parse(headerValue);
 				String filename = disposition.getFilename();
 				if (filename != null) {
+					//记录文件
 					files.add(part.getName(), new StandardMultipartFile(part, filename));
 				}
 				else {
+					//记录非文件的part
 					this.multipartParameterNames.add(part.getName());
 				}
 			}

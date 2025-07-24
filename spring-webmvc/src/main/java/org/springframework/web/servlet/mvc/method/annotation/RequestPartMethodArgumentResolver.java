@@ -130,7 +130,7 @@ public class RequestPartMethodArgumentResolver extends AbstractMessageConverterM
 		String name = getPartName(parameter, requestPart);
 		parameter = parameter.nestedIfOptional();
 		Object arg = null;
-
+		//拿到文件信息
 		Object mpArg = MultipartResolutionDelegate.resolveMultipartArgument(name, parameter, servletRequest);
 		if (mpArg != MultipartResolutionDelegate.UNRESOLVABLE) {
 			arg = mpArg;

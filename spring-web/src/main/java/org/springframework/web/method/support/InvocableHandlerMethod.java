@@ -177,7 +177,7 @@ public class InvocableHandlerMethod extends HandlerMethod {
 	@Nullable
 	public Object invokeForRequest(NativeWebRequest request, @Nullable ModelAndViewContainer mavContainer,
 			Object... providedArgs) throws Exception {
-
+		//参数解析
 		Object[] args = getMethodArgumentValues(request, mavContainer, providedArgs);
 		if (logger.isTraceEnabled()) {
 			logger.trace("Arguments: " + Arrays.toString(args));
@@ -187,7 +187,7 @@ public class InvocableHandlerMethod extends HandlerMethod {
 			this.methodValidator.applyArgumentValidation(
 					getBean(), getBridgedMethod(), getMethodParameters(), args, this.validationGroups);
 		}
-
+		//执行对应的方法
 		Object returnValue = doInvoke(args);
 
 		if (shouldValidateReturnValue() && this.methodValidator != null) {
@@ -220,9 +220,11 @@ public class InvocableHandlerMethod extends HandlerMethod {
 			if (args[i] != null) {
 				continue;
 			}
+			//遍历所有方法参数解析器，拿到合适的去解析参数
 			if (!this.resolvers.supportsParameter(parameter)) {
 				throw new IllegalStateException(formatArgumentError(parameter, "No suitable resolver"));
 			}
+			//利用找到的解析器解析参数
 			try {
 				args[i] = this.resolvers.resolveArgument(parameter, mavContainer, request, this.dataBinderFactory);
 			}

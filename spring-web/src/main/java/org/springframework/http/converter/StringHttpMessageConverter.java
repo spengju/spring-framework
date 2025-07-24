@@ -125,6 +125,7 @@ public class StringHttpMessageConverter extends AbstractHttpMessageConverter<Str
 			headers.setAcceptCharset(getAcceptedCharsets());
 		}
 		Charset charset = getContentTypeCharset(headers.getContentType());
+		//默认不是utf8编码
 		StreamUtils.copy(str, charset, outputMessage.getBody());
 	}
 

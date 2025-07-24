@@ -333,6 +333,7 @@ public abstract class AbstractMessageConverterMethodProcessor extends AbstractMe
 					converterTypeToUse = ConverterType.BASE;
 				}
 				if (converterTypeToUse != null) {
+					//写之前
 					body = getAdvice().beforeBodyWrite(body, returnType, selectedMediaType,
 							(Class<? extends HttpMessageConverter<?>>) converter.getClass(), inputMessage, outputMessage);
 					if (body != null) {
@@ -341,6 +342,7 @@ public abstract class AbstractMessageConverterMethodProcessor extends AbstractMe
 								"Writing [" + LogFormatUtils.formatValue(theBody, !traceOn) + "]");
 						addContentDispositionHeader(inputMessage, outputMessage);
 						switch (converterTypeToUse) {
+							//写回response
 							case BASE -> converter.write(body, selectedMediaType, outputMessage);
 							case GENERIC -> ((GenericHttpMessageConverter) converter).write(body, targetType, selectedMediaType, outputMessage);
 							case SMART -> ((SmartHttpMessageConverter) converter).write(body, targetResolvableType, selectedMediaType, outputMessage, null);
