@@ -156,9 +156,12 @@ import jakarta.servlet.ServletException;
  * @see org.springframework.web.servlet.support.AbstractDispatcherServletInitializer
  * @see org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer
  */
+
+//tomcat启动会找到所有加了@HandlesTypes注解的类，
+// 然后在SpringServletContainerInitializer中会初始化所有的WebApplicationInitializer，然后调用他们的onStartup方法
 public interface WebApplicationInitializer {
 
-	/**
+ 	/**
 	 * Configure the given {@link ServletContext} with any servlets, filters, listeners
 	 * context-params and attributes necessary for initializing this web application. See
 	 * examples {@linkplain WebApplicationInitializer above}.

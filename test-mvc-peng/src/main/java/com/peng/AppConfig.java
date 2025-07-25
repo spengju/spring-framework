@@ -1,5 +1,9 @@
 package com.peng;
 
+import com.peng.exception.PengHandlerExceptionResolver;
+import com.peng.interceptor.PengHandlerInterceptor1;
+import com.peng.interceptor.PengHandlerInterceptor2;
+import com.peng.interceptor.PengWebHandlerInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -12,6 +16,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.function.RouterFunction;
 import org.springframework.web.servlet.function.ServerResponse;
+import org.springframework.web.servlet.handler.MappedInterceptor;
 
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -46,19 +51,26 @@ public class AppConfig {
 //                .build();
 //    }
 
+
+    @Bean
+    public MappedInterceptor mappedInterceptor() {
+        return new MappedInterceptor(new String[]{"/test"}, new PengHandlerInterceptor1());
+    }
+
     @Bean
     public WebMvcConfigurer webMvcConfigurer() {
         return new WebMvcConfigurer() {
 
-//            @Override
-//            public void configureHandlerExceptionResolvers(List<HandlerExceptionResolver> resolvers) {
-//                resolvers.add(new ZhouyuHandlerExceptionResolver());
-//            }
+            @Override
+            public void configureHandlerExceptionResolvers(List<HandlerExceptionResolver> resolvers) {
+                resolvers.add(new PengHandlerExceptionResolver());
+            }
 //
 //            @Override
 //            public void addInterceptors(InterceptorRegistry registry) {
-////				registry.addInterceptor(new ZhouyuHandlerInterceptor1());
-//                registry.addWebRequestInterceptor(new ZhouyuWebHandlerInterceptor());
+//				registry.addInterceptor(new PengHandlerInterceptor1());
+//				registry.addInterceptor(new PengHandlerInterceptor2());
+//                registry.addWebRequestInterceptor(new PengWebHandlerInterceptor());
 //            }
 
             @Override

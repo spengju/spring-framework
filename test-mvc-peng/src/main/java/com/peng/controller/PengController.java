@@ -21,15 +21,15 @@ public class PengController {
     public String test(@RequestParam("name") String name, Model model) {
         System.out.println(name);
         model.addAttribute("name", name);
+        if (true) throw new RuntimeException("error");
         return pengService.test();
     }
 
 
-
-	@RequestMapping(method = RequestMethod.POST, path = "/upload")
-	public long test1(@RequestPart("file") MultipartFile file,@RequestPart("name") String name) {
-		System.out.println(file.getSize());
-		System.out.println(file.getOriginalFilename());
-		return file.getSize();
-	}
+    @RequestMapping(method = RequestMethod.POST, path = "/upload")
+    public long test1(@RequestPart("file") MultipartFile file, @RequestPart("name") String name) {
+        System.out.println(file.getSize());
+        System.out.println(file.getOriginalFilename());
+        return file.getSize();
+    }
 }

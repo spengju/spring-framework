@@ -415,7 +415,9 @@ public abstract class AbstractHandlerMapping extends WebApplicationObjectSupport
 	@Override
 	protected void initApplicationContext() throws BeansException {
 		extendInterceptors(this.interceptors);
+		//添加MappedInterceptor类型的bean
 		detectMappedInterceptors(this.adaptedInterceptors);
+		//合并拦截器
 		initInterceptors();
 	}
 
@@ -624,9 +626,10 @@ public abstract class AbstractHandlerMapping extends WebApplicationObjectSupport
 	protected HandlerExecutionChain getHandlerExecutionChain(Object handler, HttpServletRequest request) {
 		HandlerExecutionChain chain = (handler instanceof HandlerExecutionChain handlerExecutionChain ?
 				handlerExecutionChain : new HandlerExecutionChain(handler));
-
+		//拿到所有拦截器
 		for (HandlerInterceptor interceptor : this.adaptedInterceptors) {
 			if (interceptor instanceof MappedInterceptor mappedInterceptor) {
+				//请求是否和拦截器规则匹配
 				if (mappedInterceptor.matches(request)) {
 					chain.addInterceptor(mappedInterceptor.getInterceptor());
 				}
