@@ -589,6 +589,7 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 	@Override
 	public void afterPropertiesSet() {
 		// Do this first, it may add ResponseBody advice beans
+		//初始化ControllerAdvice
 		initControllerAdviceCache();
 		initMessageConverters();
 		//方法参数解析器
@@ -631,7 +632,7 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 		if (getApplicationContext() == null) {
 			return;
 		}
-
+		//找出spring容器里所有加了@ControllerAdvice注解的Bean
 		List<ControllerAdviceBean> adviceBeans = ControllerAdviceBean.findAnnotatedBeans(getApplicationContext());
 
 		List<Object> requestResponseBodyAdviceBeans = new ArrayList<>();
@@ -649,6 +650,7 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 			if (!binderMethods.isEmpty()) {
 				this.initBinderAdviceCache.put(adviceBean, binderMethods);
 			}
+			//是否实现了RequestBodyAdvice接口和ResponseBodyAdvice接口
 			if (RequestBodyAdvice.class.isAssignableFrom(beanType) || ResponseBodyAdvice.class.isAssignableFrom(beanType)) {
 				requestResponseBodyAdviceBeans.add(adviceBean);
 			}
@@ -986,7 +988,7 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 			});
 			invocableMethod = invocableMethod.wrapConcurrentResult(result);
 		}
-
+		//执行方法
 		invocableMethod.invokeAndHandle(webRequest, mavContainer);
 		if (asyncManager.isConcurrentHandlingStarted()) {
 			return null;
