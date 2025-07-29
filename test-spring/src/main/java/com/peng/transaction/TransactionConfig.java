@@ -2,6 +2,7 @@ package com.peng.transaction;
 
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
@@ -38,15 +39,16 @@ import javax.sql.DataSource;
  * 6、未出现异常则提及事务conn1.commit(),出现异常则回滚:conn.rollback()
  *
  */
-//@EnableTransactionManagement
-//@Configuration
+@EnableTransactionManagement
+@Configuration
+@MapperScan("com.peng.mapper")
 public class TransactionConfig {
     @Bean
     public PlatformTransactionManager transactionManager() {
         DataSourceTransactionManager transactionManager = new DataSourceTransactionManager();
         transactionManager.setDataSource(dataSource());
-        //true --> 部分失败全局会滚  false --> 部分失败全部提交
-        transactionManager.setGlobalRollbackOnParticipationFailure(false);
+        //true --> 部分失败全局回滚  false --> 部分失败全部提交
+//        transactionManager.setGlobalRollbackOnParticipationFailure(false);
 
 //        transactionManager.addListener(new TransactionExecutionListener() {
 //            @Override

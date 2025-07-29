@@ -4,6 +4,7 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.springframework.stereotype.Component;
 
 /**
  * @Author: spengju
@@ -11,8 +12,8 @@ import org.apache.ibatis.annotations.Select;
  * @Date: 2025/7/10 15:49
  * @Desc:
  */
-//@Mapper
-//@Component
+@Mapper
+@Component
 public interface PengMapper {
 
     @Select("select 'user' from t1")

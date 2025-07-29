@@ -379,9 +379,10 @@ public abstract class AbstractPlatformTransactionManager
 		Object transaction = doGetTransaction();
 		boolean debugEnabled = logger.isDebugEnabled();
 
+		//已经存在事务了
+		//隔离级别是NOT_SUPPORTED、REQUIRES_NEW则会挂起当前事物
 		if (isExistingTransaction(transaction)) {
 			// Existing transaction found -> check propagation behavior to find out how to behave.
-			//已经存在事务了
 			return handleExistingTransaction(def, transaction, debugEnabled);
 		}
 
@@ -886,7 +887,7 @@ public abstract class AbstractPlatformTransactionManager
 
 			try {
 				triggerBeforeCompletion(status);
-
+				//已经存在事务且隔离级别为NESTED
 				if (status.hasSavepoint()) {
 					if (status.isDebug()) {
 						logger.debug("Rolling back transaction to savepoint");
@@ -895,6 +896,7 @@ public abstract class AbstractPlatformTransactionManager
 					rollbackListenerInvoked = true;
 					status.rollbackToHeldSavepoint();
 				}
+				//transaction不为null，并且为新事物
 				else if (status.isNewTransaction()) {
 					if (status.isDebug()) {
 						logger.debug("Initiating transaction rollback");
@@ -905,7 +907,7 @@ public abstract class AbstractPlatformTransactionManager
 				}
 				else {
 					// Participating in larger transaction
-					//Propagation.REQUIRED
+					//已经存在事务，且隔离级别为Propagation.REQUIRED
 					if (status.hasTransaction()) {
 						if (status.isLocalRollbackOnly() || isGlobalRollbackOnParticipationFailure()) {
 							if (status.isDebug()) {

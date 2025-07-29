@@ -37,11 +37,11 @@ public class MyApplication {
 //        System.out.println(applicationContext.getBean("&userMapper"));
 //        System.out.println(applicationContext.getBean("&orderMapper"));
 
-//        PengService pengService = (PengService) applicationContext.getBean("pengService");
-//        pengService.test();
+        PengService pengService = (PengService) applicationContext.getBean("pengService");
+        pengService.test();
 
-        AService aService = (AService) applicationContext.getBean("AService");
-        aService.test();
+//        AService aService = (AService) applicationContext.getBean("AService");
+//        aService.test();
 
     }
 }

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
  * @Date: 2025/7/18 14:00
  * @Desc:
  */
-@Component
+//@Component
 public class BService {
 
     @Autowired

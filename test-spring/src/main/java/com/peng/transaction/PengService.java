@@ -29,7 +29,7 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
  * *3.方法是private会导致事务失效：spring代理是cglib代理，cglib代理是基于父子类的，子类没法重写父累的私有方法
  *
  */
-//@Component
+@Component
 public class PengService {
 
     @Autowired
@@ -41,8 +41,8 @@ public class PengService {
     /**
      * 事务失效场景
      */
-    @Transactional(propagation = Propagation.REQUIRED)
-    @Async
+    @Transactional(propagation = Propagation.NOT_SUPPORTED)
+//    @Async
     public void test() {
         System.out.println(Thread.currentThread().getName());
         /**1、开启新线程去执行，拿不到ThreadLocal里面的值导致的*/
@@ -72,15 +72,17 @@ public class PengService {
 //                System.out.println("事务被恢复");
 //            }
 //        });
-        pengMapper.insertOne(1, 1, 1);
 
+        pengMapper.insertOne(3, 1, 1);
+        //必须是代理对象执行事务才生效
+        pengService.a();
 
     }
 
 
-    @Transactional(propagation = Propagation.NESTED)
+    @Transactional(propagation = Propagation.REQUIRED)
     public void a() {
-        pengMapper.insertOne(2, 2, 2);
+        pengMapper.insertOne(4, 2, 2);
         throw new NullPointerException();
     }
 

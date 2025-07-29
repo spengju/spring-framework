@@ -41,11 +41,10 @@ import java.util.concurrent.Executor;
  * @Desc:
  */
 @ComponentScan("com.peng")
-//@MapperScan("com.peng.mapper")
 //@PropertySource("classpath:application.properties")
 //@PengMapperScan("com.peng.mapper")
 //@Import({PengImportBeanDefinitionRegistry.class})
-//@EnableAspectJAutoProxy
+@EnableAspectJAutoProxy
 @EnableAsync
 //@EnableScheduling
 //@EnableCaching

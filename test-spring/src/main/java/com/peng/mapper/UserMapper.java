@@ -11,8 +11,8 @@ import org.springframework.stereotype.Component;
  * @Date: 2025/7/10 15:49
  * @Desc:
  */
-//@Mapper
-//@Component
+@Mapper
+@Component
 public interface UserMapper {
 
     @Select("select 'user' from user")
